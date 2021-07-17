@@ -1,0 +1,19 @@
+{
+  "name": "Server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Tanzim Hossain Romel",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.12"
+  }
+}

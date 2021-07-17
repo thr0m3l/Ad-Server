@@ -1,0 +1,14 @@
+version: "3.8"
+
+networks:
+    isolation-network:
+      driver: bridge
+services:
+    locserver:
+        build: ./
+        image: locserver
+        ports:
+            - 8080:8080
+        networks:
+            - isolation-network
+        restart: unless-stopped
