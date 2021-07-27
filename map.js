@@ -11,8 +11,6 @@ const findArea = (point) => {
 
     for (var i = 0; i < areas.length; i++) {
         if (isInsidePolygon(point, areas[i].points)) {
-            console.log('area: ' + areas[i].area);
-
             return { location: areas[i].area, index: `${i}.txt` };
         }
     }

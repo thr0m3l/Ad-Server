@@ -23,20 +23,51 @@ app.get('/', (req, res) => {
   const { latitude, longitude } = latestData.geo;
   const { time, date } = latestData.gps;
   const { location, index } = findArea({ lat: latitude, lng: longitude });
-  console.log({ output: location, fileName: index, location: [latitude, longitude], time, date }, requestCount++);
+  console.log(requestCount++);
   res.status(200).json({ output: location, fileName: index, location: [latitude, longitude], time, date });
-  console.log(index.length);
-  // res.status(200).send(index);
 });
 
 let latestData = { geo: { latitude: 'default', longitude: 'default' }, gps: { time: 'default', date: 'default' } };
 
 
 app.get('/data', (req, res) => {
-  latestData = gprmcParser(req.query.gprmc);
-  console.log(req.query);
-  res.status(200).json({ message: 'Baaler data paisi' });
-})
+  data = gprmcParser(req.query.gprmc);
+
+  const time = new Date(data.gps.date + ' ' + data.gps.time);
+  const latestTime = new Date(latestData.gps.date + ' ' + latestData.gps.time);
+
+  if (time.getTime() > latestTime.getTime() || latestData.gps.time === 'default'){
+    latestData = data;
+    console.log(data);
+  }
+
+  res.status(200).json({ message: 'Data well received' });
+});
+
+let sosData = [];
+
+app.get('/sos', (req, res) => {
+  console.log('Received SOS');
+  sosData.push({latestData, deviceId: req.query.id});
+  console.log(sosData);
+  const { latitude, longitude } = latestData.geo;
+  const { time, date } = latestData.gps;
+  const { location, index } = findArea({ lat: latitude, lng: longitude });
+  console.log(requestCount++);
+  res.status(200).json({ output: location, fileName: index, location: [latitude, longitude], time, date });
+
+});
+
+app.get('/getsos', (req, res) => {
+  console.log("Sending SOS data");
+
+  if (req.query.mode && req.query.mode === 'clear') {
+    sosData = [];
+  }
+
+  res.status(200).json({sosData});
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running at at http://localhost:${PORT}`)
